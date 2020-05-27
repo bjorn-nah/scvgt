@@ -1,0 +1,6 @@
+# ingore
+*.o
+*.png
+*.sjpg
+*.txt
+*.exe
