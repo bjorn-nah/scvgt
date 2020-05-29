@@ -46,6 +46,39 @@ void background(char *in_array, int width, int height){
 	fclose(fp);
 }
 
+void sprite(char *in_array, int width, int height){
+	FILE *fp;
+	fp = fopen("sprite.txt", "w+");
+	
+	for(int y=0;y<=height-16;y+=16){
+		for(int x=0;x<=height-16;x+=16){
+			for(int j=y;j<16+y;j+=2){
+				for(int i=x;i<16+x;i+=4){
+					unsigned char a= 
+					*((in_array+(i+3)*height) + j + 1) * 0x01 +
+					*((in_array+(i+2)*height) + j + 1) * 0x02 +
+					*((in_array+(i+1)*height) + j + 1) * 0x04 +
+					*((in_array+i*height) + j + 1) * 0x08 +
+					*((in_array+(i+3)*height) + j) * 0x10 +
+					*((in_array+(i+2)*height) + j) * 0x20 +
+					*((in_array+(i+1)*height) + j) * 0x40 +
+					*((in_array+i*height) + j) * 0x80 ;
+					if(a<0x10)
+					{
+						fprintf(fp, "0x0%X, ", a);
+					} else
+					{
+						fprintf(fp, "0x%X, ", a);
+					}
+				}
+				fprintf(fp,"\n");
+			}
+			fprintf(fp,"\n");
+		}
+	}
+	fclose(fp);
+}
+
 int main(int argc, char *argv[]) {
 	
 		
@@ -72,14 +105,13 @@ int main(int argc, char *argv[]) {
 		printf("\n");
 	}
 	
-	// opterr = 0;	// no arguments neededs
 	opt = getopt(argc, argv, "bs");
 	switch(opt){
 		case 'b':
 		background((char *)img_array, width, height);
 		break;
 		case 's':
-		printf("\nNot implemented yet. :)");
+		sprite((char *)img_array, width, height);
 		break;
 	}
 
